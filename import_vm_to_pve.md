@@ -8,7 +8,7 @@ A great source for virtual machines is vulnhub.com. You can download OVA files f
     root@pve:/# qm importdisk TARGETVMID extracted.bmdk local -format qcow2
     GUI > VM > Hardware > Hard Disk > Add
     
-## Detailed explaination
+## Detailed
 
 1. Once you have a working virtual machine on your workstation, from virtualbox, go to 
 
