@@ -27,7 +27,7 @@ A great source for virtual machines is vulnhub.com. You can download OVA files f
     user@host# scp vm.vmdk root@pve:/tmp
     password:
     
-Depending on the size of the disk, the network etc, this step can be fast or slow
+**Depending on the size of the disk, the network etc, this step can be fast or slow**
 
 4. Access the proxmox server and convert the vmdk file to qcow2
 
@@ -35,7 +35,7 @@ Depending on the size of the disk, the network etc, this step can be fast or slo
     or
     root@pve# qemu-img convert -O qcow2 -c -f vmdk vm.vmdk vm.qcow2
     
-This step may take some time.
+**This step may take some time.**
 
 5. Next step is proxmox's GUI
 
