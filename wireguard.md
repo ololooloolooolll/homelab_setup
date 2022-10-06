@@ -50,7 +50,7 @@ PublicKey = DVcuhbiXXXXXXXXXXXXXXXXXXXXXkeJ9qr5KcCpXkiM=
 ### Full tunnel ###
 Allowed IPs = 0.0.0.0/0
 ### Split tunnel ###
-Allowed IPs = 192.168.0.0/22
+# Allowed IPs = 192.168.0.0/22
 Endpoint = 192.0.2.150:51888
 ```
 
