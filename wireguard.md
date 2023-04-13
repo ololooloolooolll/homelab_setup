@@ -27,7 +27,7 @@ sysctl -w net.ipv4.ip_forward=1
 # iptables -I INPUT -i wg0 -j ACCEPT
 # iptables -I FORWARD -i ens18 -o wg0 -j ACCEPT
 # iptables -I FORWARD -i wg0 -i ens18 -j ACCEPT
-# iptables -I FORWARD -i ens18 -p udp --dport 51888 -j ACCEPT
+# iptables -I FORWARD -i ens18 -p udp --dport 51999 -j ACCEPT
 ```
 
 4. Generate keys
@@ -51,7 +51,7 @@ PublicKey = DVcuhbiXXXXXXXXXXXXXXXXXXXXXkeJ9qr5KcCpXkiM=
 Allowed IPs = 0.0.0.0/0
 ### Split tunnel ###
 # Allowed IPs = 192.168.0.0/22
-Endpoint = 192.0.2.150:51888
+Endpoint = 192.0.2.150:51999
 ```
 
 ## Server side configuration
@@ -81,5 +81,57 @@ AllowedIPs = 192.168.200.0/24
 
 ```
 # wg-quick down wg0; wg-quick up wg0
+```
+
+---
+
+New client setup
+
+I can't believe how easy it is to setup a new client in wireguard compared to all the work that needs to be done with openvpn
+
+
+1. Generate private and public keys for the new client. It may be easier to share the private key and have multiple public keys derived from it.
+
+```
+wg genkey | tee client2_pri | wg pubkey > client2_pub
+```
+
+2. Copy these files to the new client
+
+```
+ls /etc/wireguard
+client2_pri  client2_pub  wg0.conf
+```
+
+3. Update the server config
+
+```
+[Interface]
+## Private IP address for the wg0 interface ##
+Address = 192.168.200.1/24
+
+## VPN server listening port ##
+ListenPort = 51999
+
+## VPN server private key ##
+PrivateKey = QA2d1MXXXXXXXXXXXXXXXXXXXXO/QlQwMhg7NIyqAWI=
+
+## Masquerade, hide-nat rules ##
+PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o ens3 -j MASQUERADE; iptables -t nat -A POSTROUTING -o tun0 -j MASQUERADE
+PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o ens3 -j MASQUERADE; iptables -t nat -D POSTROUTING -o tun0 -j MASQUERADE
+
+[Peer]
+
+PublicKey = DVcuhbiXXXXXXXXXXXXXXXXXXXXXkeJ9qr5KcCpXkiM=
+PublicKey = Kpg4e7KoXXXXXXXXXXXXXXXXXXXXXd03cy8kKcXo7+1U=
+
+## Encryption domain ##
+AllowedIPs = 192.168.200.0/24
+```
+
+4. Configure the client
+
+```
+...
 ```
 
